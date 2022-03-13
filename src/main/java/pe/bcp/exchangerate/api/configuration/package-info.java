@@ -1,1 +1,0 @@
-package pe.bcp.exchangerate.api.configuration;
