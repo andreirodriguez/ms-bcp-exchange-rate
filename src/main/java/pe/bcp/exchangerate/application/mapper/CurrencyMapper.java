@@ -2,7 +2,6 @@ package pe.bcp.exchangerate.application.mapper;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.BeanUtils;
 

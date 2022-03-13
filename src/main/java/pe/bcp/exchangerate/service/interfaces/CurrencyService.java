@@ -2,11 +2,12 @@ package pe.bcp.exchangerate.service.interfaces;
 
 import java.util.List;
 
+import io.reactivex.Single;
 import pe.bcp.exchangerate.application.domain.Currency;
 import pe.bcp.exchangerate.application.domain.Pagination;
 
 public interface CurrencyService {
-	Currency getSelect(int id);
+	Single<Currency> getSelect(int id);
 
-	List<Currency> getSelectByActive(Boolean active, Pagination pagination);
+	Single<List<Currency>> getSelectByActive(Pagination pagination);
 }

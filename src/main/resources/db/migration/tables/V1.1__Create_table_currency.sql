@@ -1,7 +1,8 @@
-CREATE TABLE `currency` (
-  `id` int unsigned NOT NULL AUTO_INCREMENT,
-  `title` varchar(256) NOT NULL,
-  `symbol` varchar(16) NOT NULL,
-  `active` bit NOT NULL,
-  PRIMARY KEY `pk_currency_id` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+CREATE TABLE dbo.currency (
+  id int IDENTITY ( 1,1 ) ,
+  title varchar(256) NOT NULL,
+  symbol varchar(256) NOT NULL,
+  active bit NOT NULL
+);
+
+ALTER TABLE dbo.currency ADD CONSTRAINT PK_currency_id PRIMARY KEY (id ASC);

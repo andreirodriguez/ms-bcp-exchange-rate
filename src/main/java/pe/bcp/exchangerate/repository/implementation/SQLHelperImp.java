@@ -71,7 +71,7 @@ public class SQLHelperImp implements SQLHelper {
 		
 		Map<String, Object> result = jdbc.execute(parameters);
 		
-		return (int)result.get("id_out");
+		return (int)result.get("id");
 	}	
 	
 	@Override
@@ -97,14 +97,22 @@ public class SQLHelperImp implements SQLHelper {
 	
 	private SimpleJdbcCall getSimpleJdbc(String procedure)
 	{		
-		SimpleJdbcCall jdbc = new SimpleJdbcCall(jdbcTemplate.getDataSource()).withProcedureName(procedure);
+		String[] schemaMethod = procedure.split("\\.");
+		String schema = schemaMethod[0];
+		String methodSQL = schemaMethod[1]; 
+		
+		SimpleJdbcCall jdbc = new SimpleJdbcCall(jdbcTemplate.getDataSource()).withSchemaName(schema).withProcedureName(methodSQL);
 		
 		return jdbc;
 	}	
 	
 	private SimpleJdbcCall getSimpleJdbc(String procedure, RowMapper<?> rowMapper)
 	{		
-		SimpleJdbcCall jdbc = new SimpleJdbcCall(jdbcTemplate.getDataSource()).withProcedureName(procedure).returningResultSet("items", rowMapper);
+		String[] schemaMethod = procedure.split("\\.");
+		String schema = schemaMethod[0];
+		String methodSQL = schemaMethod[1]; 
+		
+		SimpleJdbcCall jdbc = new SimpleJdbcCall(jdbcTemplate.getDataSource()).withSchemaName(schema).withProcedureName(methodSQL).returningResultSet("items", rowMapper);
 		
 		return jdbc;
 	}
@@ -142,7 +150,7 @@ public class SQLHelperImp implements SQLHelper {
 		{
 			keyOrderBy = text.split(" ");
 			
-			orderBy += ",`" + keyOrderBy[0] + "` " + keyOrderBy[1];  
+			orderBy += ",[" + keyOrderBy[0] + "] " + keyOrderBy[1];  
 		}
 		
 		return orderBy.substring(1);

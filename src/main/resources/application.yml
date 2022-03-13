@@ -20,10 +20,14 @@ spring:
       max-file-size: 8MB
       max-request-size: 10MB
   datasource:
-    url: jdbc:mysql://localhost:3306/exchangerate?useSSL=false&serverTimezone=UTC
-    username: root
-    password: admin
+    url: jdbc:sqlserver://HPENVY-ANDREI\SQL2019;databaseName=exchangerate
+    username: sa
+    password: Theo@ndre
+    driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
   flyway:
     baseline-on-migrate: true
     enabled: true
+  sql:
+    init:
+      platform: sqlserver
       
