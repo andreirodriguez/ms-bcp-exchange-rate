@@ -1,5 +1,12 @@
+USE [exchangerate]
+GO
+/****** Object:  StoredProcedure [dbo].[exchange_rate_search]    Script Date: 13/03/2022 13:32:14 ******/
+SET ANSI_NULLS ON
+GO
+SET QUOTED_IDENTIFIER ON
+GO
 -- ${flyway:timestamp}
-CREATE OR ALTER PROCEDURE dbo.exchange_rate_search
+ALTER   PROCEDURE [dbo].[exchange_rate_search]
 (
 	@parameters_json ntext,
 	@order_by varchar(128)
@@ -86,4 +93,3 @@ BEGIN
 	EXECUTE SYS.SP_EXECUTESQL @sql,@sql_parameter,@id;
 END;
 
-GO
