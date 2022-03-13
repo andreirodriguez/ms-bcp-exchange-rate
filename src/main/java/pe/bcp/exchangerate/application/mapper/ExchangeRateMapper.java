@@ -6,6 +6,7 @@ import java.util.List;
 import org.springframework.beans.BeanUtils;
 
 import pe.bcp.exchangerate.application.domain.ExchangeRate;
+import pe.bcp.exchangerate.dto.request.ExchangeRateRequest;
 import pe.bcp.exchangerate.dto.response.ExchangeRateResponse;
 
 public class ExchangeRateMapper {
@@ -24,5 +25,13 @@ public class ExchangeRateMapper {
 			o.add(ExchangeRateMapper.ToExchangeRateResponse(i));
 
 		return o;
-	}	
+	}
+	
+	public static ExchangeRate ToExchangeRate(ExchangeRateRequest i) {
+		ExchangeRate o = new ExchangeRate();
+
+		BeanUtils.copyProperties(i, o);
+
+		return o;
+	}
 }

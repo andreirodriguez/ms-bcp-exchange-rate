@@ -1,9 +1,11 @@
 package pe.bcp.exchangerate.service.implementation;
 
 import java.util.List;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,8 +57,16 @@ public class ExchangeRateAuditServiceImp implements ExchangeRateAuditService {
 	
 	
 
-	public void setRegister(ExchangeRateAudit o) {
-		exchangeRateAuditRepository.setInsertUpdate(o);
+	public void setRegister(ExchangeRate o) {
+		ExchangeRateAudit audit = new ExchangeRateAudit();
+		
+		BeanUtils.copyProperties(o, audit);
+		
+		audit.setId(0);
+		audit.setExchangeRateId(o.getId());
+		audit.setRegisterDatetime(new Date());
+		
+		exchangeRateAuditRepository.setInsertUpdate(audit);
 	}
 
 	public void setUpdate(int id,ExchangeRateAudit o) {

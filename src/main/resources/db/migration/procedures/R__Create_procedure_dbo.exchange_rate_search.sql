@@ -1,10 +1,3 @@
-USE [exchangerate]
-GO
-/****** Object:  StoredProcedure [dbo].[exchange_rate_search]    Script Date: 13/03/2022 13:32:14 ******/
-SET ANSI_NULLS ON
-GO
-SET QUOTED_IDENTIFIER ON
-GO
 -- ${flyway:timestamp}
 ALTER   PROCEDURE [dbo].[exchange_rate_search]
 (

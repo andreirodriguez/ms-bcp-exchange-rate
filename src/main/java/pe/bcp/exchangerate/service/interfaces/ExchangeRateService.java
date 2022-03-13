@@ -14,8 +14,8 @@ public interface ExchangeRateService {
 
 	Single<List<ExchangeRate>> getListInbox(int currencyOriginId,int currencyExchangeId,String registerDateUntil,String registerDateTo, Pagination pagination);
 
-	void setRegister(ExchangeRate o);
+	Single<Integer> setRegister(ExchangeRate o);
 
-	void setUpdate(int id,ExchangeRate o);
+	Single<Integer> setUpdate(int id,ExchangeRate o);
 
 }

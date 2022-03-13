@@ -1,6 +1,7 @@
 package pe.bcp.exchangerate.service.implementation;
 
 import java.util.List;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,8 +12,10 @@ import org.springframework.stereotype.Service;
 
 import io.reactivex.Single;
 import pe.bcp.exchangerate.repository.interfaces.ExchangeRateRepository;
+import pe.bcp.exchangerate.service.interfaces.CurrencyExchangeService;
+import pe.bcp.exchangerate.service.interfaces.ExchangeRateAuditService;
 import pe.bcp.exchangerate.service.interfaces.ExchangeRateService;
-import pe.bcp.exchangerate.application.domain.Currency;
+import pe.bcp.exchangerate.application.domain.CurrencyExchange;
 import pe.bcp.exchangerate.application.domain.ExchangeRate;
 import pe.bcp.exchangerate.application.domain.Pagination;
 import pe.bcp.exchangerate.cross.utils.ConvertFormat;
@@ -22,6 +25,12 @@ public class ExchangeRateServiceImp implements ExchangeRateService {
 
 	@Autowired
 	private ExchangeRateRepository exchangeRateRepository;
+	
+	@Autowired
+	private CurrencyExchangeService currencyExchangeService;
+	
+	@Autowired
+	private ExchangeRateAuditService exchangeRateAuditService;	
 
 	@Override
 	public Single<ExchangeRate> getSelect(int id) {
@@ -74,15 +83,67 @@ public class ExchangeRateServiceImp implements ExchangeRateService {
 		return exchangeRateRepository.getSearch(parameters, pagination);
 	}	
 
-	public void setRegister(ExchangeRate o) {
-		exchangeRateRepository.setInsertUpdate(o);
+	public Single<Integer> setRegister(ExchangeRate o) {
+        return Single.create(singleSubscriber -> {
+            CurrencyExchange currency = this.setCalculateExchange(o);
+            if (currency==null)
+                singleSubscriber.onError(new EntityNotFoundException());
+            else 
+            {
+        		o.setRegisterDatetime(new Date());
+        		o.setActive(true);
+        		
+        		exchangeRateRepository.setInsertUpdate(o);
+        		
+        		exchangeRateAuditService.setRegister(o);
+        		
+        		singleSubscriber.onSuccess(o.getId());
+            }
+        });
 	}
 
-	public void setUpdate(int id,ExchangeRate o) {
-		o.setId(id);
-
-		exchangeRateRepository.setInsertUpdate(o);
+	public Single<Integer> setUpdate(int id,ExchangeRate o) {
+        return Single.create(singleSubscriber -> {
+        	ExchangeRate exchange = this.getSearchById(id);
+        	
+        	if(exchange==null)
+        		singleSubscriber.onError(new EntityNotFoundException());
+        	else
+        	{
+        		exchange.setAmountOrigin(o.getAmountOrigin());
+        		exchange.setRateExchange(o.getRateExchange());
+        		
+                CurrencyExchange currency = this.setCalculateExchange(exchange);
+                if (currency==null)
+                    singleSubscriber.onError(new EntityNotFoundException());
+                else 
+                {        		
+            		exchangeRateRepository.setInsertUpdate(exchange);
+            		
+            		exchangeRateAuditService.setRegister(exchange);
+            		
+            		singleSubscriber.onSuccess(exchange.getId());
+                }        		
+        	}
+        });
 	}
 
+	private CurrencyExchange setCalculateExchange(ExchangeRate exchange)
+	{
+		CurrencyExchange currency = currencyExchangeService.getSelectByCurrencyOriginExchange(exchange.getCurrencyOriginId(), exchange.getCurrencyExchangeId());
+		
+		if(currency==null) return null;
+		
+		Double amountExchange = 0.0;
+		
+		if(currency.getMathematicalOperator().equals("D"))
+			amountExchange = exchange.getAmountOrigin() / exchange.getRateExchange();
+		else
+			amountExchange = exchange.getAmountOrigin() * exchange.getRateExchange();
+		
+		exchange.setAmountExchange(amountExchange);
+		
+		return currency;
+	}
 
 }

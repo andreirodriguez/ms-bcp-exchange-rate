@@ -1,5 +1,7 @@
 package pe.bcp.exchangerate.api.controller;
 
+import java.net.URI;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,6 +16,7 @@ import io.reactivex.Single;
 import io.reactivex.schedulers.Schedulers;
 import pe.bcp.exchangerate.dto.response.PaginationResponse;
 import pe.bcp.exchangerate.dto.query.ExchangeRateQuery;
+import pe.bcp.exchangerate.dto.request.ExchangeRateRequest;
 import pe.bcp.exchangerate.dto.response.ExchangeRateResponse;
 import pe.bcp.exchangerate.application.mapper.ExchangeRateMapper;
 import pe.bcp.exchangerate.service.interfaces.ExchangeRateService;
@@ -39,6 +42,21 @@ public class ExchangeRateController {
                 .subscribeOn(Schedulers.io())
                 .map(list -> ResponseEntity.ok(new PaginationResponse<ExchangeRateResponse>(q.getPagination(),ExchangeRateMapper.ToArrayExchangeRateResponse(list))));
 	}
+	
+	@PostMapping() 
+    public Single<ResponseEntity<Integer>> setRegister(@RequestBody ExchangeRateRequest exchangeRateRequest) {
+        return exchangeRateService.setRegister(ExchangeRateMapper.ToExchangeRate(exchangeRateRequest)).
+        		subscribeOn(Schedulers.io()).
+        		map(result -> ResponseEntity.created(URI.create("/exchange-rates/exchange-rates/" + result)).body(result));
+    }	
+    
+	@PutMapping("/{id}") 
+    public Single<ResponseEntity<Integer>> setUpdate(@PathVariable int id,@RequestBody ExchangeRateRequest exchangeRateRequest) {
+		
+        return exchangeRateService.setUpdate(id,ExchangeRateMapper.ToExchangeRate(exchangeRateRequest)).
+                subscribeOn(Schedulers.io()).
+                map(result -> ResponseEntity.ok(result));		
+    }	    
 
 
 }

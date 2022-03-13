@@ -34,7 +34,8 @@ public class CurrencyExchangeServiceImp implements CurrencyExchangeService {
         });	
 	}
 	
-	private CurrencyExchange getSearchById(int id) {
+	@Override
+	public CurrencyExchange getSearchById(int id) {
 		Map<String, Object> parameters = new HashMap<String, Object>();
 
 		parameters.put("id",id);
@@ -57,6 +58,17 @@ public class CurrencyExchangeServiceImp implements CurrencyExchangeService {
 		parameters.put("active",1);
 
 		return currencyExchangeRepository.getSearch(parameters, pagination);
+	}
+
+	@Override
+	public CurrencyExchange getSelectByCurrencyOriginExchange(int currencyOriginId, int currencyExchangeId) {
+		Map<String, Object> parameters = new HashMap<String, Object>();
+
+		parameters.put("currency_origin_id",currencyOriginId);
+		parameters.put("currency_exchange_id",currencyExchangeId);
+		parameters.put("active",1);
+
+		return currencyExchangeRepository.getSearch(parameters);
 	}
 
 
