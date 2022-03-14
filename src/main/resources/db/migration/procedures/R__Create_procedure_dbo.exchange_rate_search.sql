@@ -1,5 +1,5 @@
 -- ${flyway:timestamp}
-ALTER   PROCEDURE [dbo].[exchange_rate_search]
+CREATE OR ALTER PROCEDURE [dbo].[exchange_rate_search]
 (
 	@parameters_json ntext,
 	@order_by varchar(128)
