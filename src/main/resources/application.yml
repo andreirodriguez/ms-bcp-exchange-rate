@@ -20,9 +20,9 @@ spring:
       max-file-size: 8MB
       max-request-size: 10MB
   datasource:
-    url: jdbc:sqlserver://18.224.152.190:1433;databaseName=exchangerate
+    url: jdbc:sqlserver://HPENVY-ANDREI\SQL2019;databaseName=exchangerate
     username: sa
-    password: s3FY6ubXJz3I
+    password: Theo@ndre
     driver-class-name: com.microsoft.sqlserver.jdbc.SQLServerDriver
   flyway:
     baseline-on-migrate: true
@@ -30,4 +30,14 @@ spring:
   sql:
     init:
       platform: sqlserver
+      
+identity-provider:
+  url-introspect: https://api.bcp.com/identity/introspect
+  resource-id: ms-bcp-exchange-rate
+  resource-secret: 609DED5D-09E7-4282-96F4-14DD3B6CF6C9
+  url-identity: https://api.bcp.com/identity
+  client-id: bcp.swagger
+  client-secret: 71D58FDC-8467-4D61-9010-DCE401F16A78
+
+disable-security: true      
       
