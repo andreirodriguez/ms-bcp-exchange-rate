@@ -122,9 +122,9 @@ BEGIN
 			SET @sql_where += + '
 			AND 
 			(
-				EXC.register_datetime >= Convert(DATETIME,@register_datetime_until,103)
+				EXC.register_datetime >= Convert(DATETIME,@register_datetime_until,102)
 				AND
-				EXC.register_datetime < Convert(DATETIME,@register_datetime_to,103) + 1
+				EXC.register_datetime < Convert(DATETIME,@register_datetime_to,102) + 1
 			)
 			';
 		END;
