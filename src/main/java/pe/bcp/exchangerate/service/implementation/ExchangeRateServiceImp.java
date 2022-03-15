@@ -112,6 +112,10 @@ public class ExchangeRateServiceImp implements ExchangeRateService {
         	{
         		exchange.setAmountOrigin(o.getAmountOrigin());
         		exchange.setRateExchange(o.getRateExchange());
+        		exchange.setCurrencyOriginId(o.getCurrencyOriginId());
+        		exchange.setCurrencyExchangeId(o.getCurrencyExchangeId());
+        		exchange.setRegisterUserId(o.getRegisterUserId());
+        		exchange.setRegisterUserFullname(o.getRegisterUserFullname());        		
         		
                 CurrencyExchange currency = this.setCalculateExchange(exchange);
                 if (currency==null)
@@ -141,7 +145,7 @@ public class ExchangeRateServiceImp implements ExchangeRateService {
 		else
 			amountExchange = exchange.getAmountOrigin() * exchange.getRateExchange();
 		
-		exchange.setAmountExchange(amountExchange);
+		exchange.setAmountExchange(ConvertFormat.Round(amountExchange,2));
 		
 		return currency;
 	}

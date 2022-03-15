@@ -5,6 +5,9 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
+import java.text.DecimalFormat;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -79,5 +82,11 @@ public class ConvertFormat
 	    return t -> seen.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null; 
 	}	
 	
-     
+	
+	public static Double Round(Double value, int precision) 
+    {
+		BigDecimal o = new BigDecimal(value).setScale(precision, RoundingMode.HALF_UP);
+
+		return o.doubleValue();
+    }   		
 }
